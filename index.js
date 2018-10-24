@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
 const dates = require('./controller/date.controller');
 
@@ -6,38 +8,13 @@ const dates = require('./controller/date.controller');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
+const User = require('./model/user.model');
 const Dates = require('./model/date.model');
 
-/*var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {*/
-
-
+app.use(bodyParser.json());
 
 app.use('/dates', dates);
-
-/*app.get('/', function (req, res) {
-    const newDate = new Dates({
-        day: new Date(),
-        description: 'TestTest2'
-    });
-
-    newDate.save().then(() => {
-        Dates.find(function (error, dates) {
-            if (!error) {
-                res.send(dates);
-            } else {
-                res.send('Read Error');
-            }
-        });
-
-    })
-        .catch(() => {
-            res.send('error');
-        });
-});*/
 
 app.listen(8888, function () {
     console.log("Server listening on port 8888");
 });
-//});
