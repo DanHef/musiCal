@@ -5,13 +5,15 @@ const Dates = require('../model/date.model');
 
 //get all existing dates
 router.get('/', function (req, res) {
-    Dates.find(function (error, dates) {
-        if (!error) {
-            res.send(dates);
-        } else {
-            res.send('Read Error');
-        }
-    });
+    Dates.find()
+        .populate('attendees.user')
+        .exec(function (error, dates) {
+            if (!error) {
+                res.send(dates);
+            } else {
+                res.send('Read Error');
+            }
+        });
 });
 
 
@@ -25,7 +27,8 @@ router.post('/', function (req, res) {
         toDay: body.toDay,
         toTime: body.toTime,
         description: body.description,
-        type: body.dateType
+        type: body.dateType,
+        attendees: body.attendees
     });
 
     newDate.save()
@@ -47,13 +50,15 @@ router.get('/:id/attendees', function (req, res) {
 
 //get a single date
 router.get('/:id', function (req, res) {
-    Dates.findById(req.params.id, function(error, date) {
-        if(!error) {
-            res.send(date);
-        } else {
-            res.send('Date not found');
-        }
-    });
+    Dates.findById(req.params.id)
+        .populate('attendees.user')
+        .exec(function (error, date) {
+            if (!error) {
+                res.send(date);
+            } else {
+                res.send('Date not found');
+            }
+        });
 });
 
 module.exports = router;
