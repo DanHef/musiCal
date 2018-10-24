@@ -1,3 +1,45 @@
 <p>
-  create-date works!
+  <label>
+    From:
+    <input type="text" [formControl]="fromDate">
+  </label>
+</p>
+
+<p>
+  <label>
+    From Time:
+    <input type="text" [formControl]="fromTime">
+  </label>
+</p>
+
+<p>
+  <label>
+    To:
+    <input type="text" [formControl]="toDate">
+  </label>
+</p>
+
+<p>
+  <label>
+    To Time:
+    <input type="text" [formControl]="toTime">
+  </label>
+</p>
+
+<p>
+  <label>
+      Description:
+      <input type="text" [formControl]="description">
+    </label>
+</p>
+
+<p>
+  <label>
+        Type:
+        <input type="text" [formControl]="type">
+      </label>
+</p>
+
+<p>
+  <button (click)="createDate()">Create Date</button>
 </p>

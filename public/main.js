@@ -205,6 +205,54 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/common/date.service.ts":
+/*!****************************************!*\
+  !*** ./src/app/common/date.service.ts ***!
+  \****************************************/
+/*! exports provided: DateService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateService", function() { return DateService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SERVER_URL = "http://localhost:8888";
+var DateService = /** @class */ (function () {
+    function DateService(http) {
+        this.http = http;
+    }
+    DateService.prototype.create = function (date) {
+        this.http.post(SERVER_URL + "/dates", date).subscribe(function (response) {
+            console.log("Successfully created new date");
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    DateService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], DateService);
+    return DateService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/common/user.service.ts":
 /*!****************************************!*\
   !*** ./src/app/common/user.service.ts ***!
@@ -228,12 +276,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+var server_url = "http://localhost:8888";
 var UserService = /** @class */ (function () {
     function UserService(http) {
         this.http = http;
     }
     UserService.prototype.create = function (user) {
-        this.http.post("http://localhost:8888/users", user).subscribe(function (response) {
+        this.http.post(server_url + "/users", user).subscribe(function (response) {
             console.log(response);
         });
     };
@@ -268,7 +317,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  create-date works!\n</p>\n"
+module.exports = "<p>\n  <label>\n    From:\n    <input type=\"text\" [formControl]=\"fromDate\">\n  </label>\n</p>\n\n<p>\n  <label>\n    From Time:\n    <input type=\"text\" [formControl]=\"fromTime\">\n  </label>\n</p>\n\n<p>\n  <label>\n    To:\n    <input type=\"text\" [formControl]=\"toDate\">\n  </label>\n</p>\n\n<p>\n  <label>\n    To Time:\n    <input type=\"text\" [formControl]=\"toTime\">\n  </label>\n</p>\n\n<p>\n  <label>\n      Description:\n      <input type=\"text\" [formControl]=\"description\">\n    </label>\n</p>\n\n<p>\n  <label>\n        Type:\n        <input type=\"text\" [formControl]=\"type\">\n      </label>\n</p>\n\n<p>\n  <button (click)=\"createDate()\">Create Date</button>\n</p>"
 
 /***/ }),
 
@@ -283,6 +332,8 @@ module.exports = "<p>\n  create-date works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CreateDateComponent", function() { return CreateDateComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _common_date_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/date.service */ "./src/app/common/date.service.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -293,10 +344,29 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var CreateDateComponent = /** @class */ (function () {
-    function CreateDateComponent() {
+    function CreateDateComponent(dateService) {
+        this.dateService = dateService;
+        this.fromDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
+        this.fromTime = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
+        this.toDate = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
+        this.toTime = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
+        this.description = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
+        this.type = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('');
     }
     CreateDateComponent.prototype.ngOnInit = function () {
+    };
+    CreateDateComponent.prototype.createDate = function () {
+        this.dateService.create({
+            "fromDay": this.fromDate.value,
+            "fromTime": this.fromTime.value,
+            "toDay": this.toDate.value,
+            "toTime": this.toTime.value,
+            "description": this.description.value,
+            "dateType": this.type.value
+        });
     };
     CreateDateComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -304,7 +374,7 @@ var CreateDateComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./create-date.component.html */ "./src/app/create-date/create-date.component.html"),
             styles: [__webpack_require__(/*! ./create-date.component.css */ "./src/app/create-date/create-date.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_common_date_service__WEBPACK_IMPORTED_MODULE_1__["DateService"]])
     ], CreateDateComponent);
     return CreateDateComponent;
 }());
