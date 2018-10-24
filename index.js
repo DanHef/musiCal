@@ -6,7 +6,7 @@ const dates = require('./controller/date.controller');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
-const dateModel = require('./model/date.model');
+const Dates = require('./model/date.model');
 
 /*var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

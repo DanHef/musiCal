@@ -10,6 +10,6 @@ const dateModel = new Schema({
     type: { type: String, required: false }
 });
 
-mongoose.model('dates', dateModel);
+const Dates = mongoose.model('dates', dateModel);
 
-module.exports = dateModel; 
+module.exports = Dates; 
