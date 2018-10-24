@@ -22,7 +22,8 @@ router.post('/', function (req, res) {
     const newUser = new User({
         lastname: body.lastname,
         firstname: body.firstname,
-        email: body.email
+        email: body.email,
+        role: body.role
     });
 
     newUser.save()
