@@ -8,8 +8,9 @@ const dateModel = new Schema({
     toTime: { type: String, required: true },
     description: { type: String, required: true },
     type: { type: String, required: false },
-    attendees: [{ type: Number, required: true },
-                {type: mongoose.Schema.Types.ObjectId, ref: 'user'}] ,
+    attendees: [{
+                    status: { type: Number, required: true },
+                    user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}}] ,
 });
 
 const Dates = mongoose.model('date', dateModel);
