@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 app.use('/dates', dates);
 app.use('/users', users);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.listen(8888, function () {
     console.log("Server listening on port 8888");
 });
