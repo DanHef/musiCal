@@ -6,10 +6,12 @@ import { CreateDateComponent } from "./create-date/create-date.component";
 import { DatesOverviewComponent } from "./dates-overview/dates-overview.component";
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'createUser', component: CreateUserComponent },
-  { path: 'createDate', component: CreateDateComponent},
-  { path: 'datesOverview', component: DatesOverviewComponent},
+  { path: 'home', component: HomeComponent,
+    children: [
+        { path: 'createUser', component: CreateUserComponent },
+        { path: 'createDate', component: CreateDateComponent},
+        { path: 'datesOverview', component: DatesOverviewComponent},
+    ] },
   {
     path: '',
     redirectTo: '/home',

@@ -1,3 +1,11 @@
-<a routerLink="/createUser" routerLinkActive="active">Create User</a><br>
-<a routerLink="/createDate" routerLinkActive="active">Create New Date</a><br>
-<a routerLink="/datesOverview" routerLinkActive="active">Show Dates</a><br>
+<mat-toolbar>
+    <span>MusiCal</span>
+
+    <span class="toolbarSpacer"></span>
+
+    <button mat-button [routerLink]="['./createUser']" (click)="onCreateUser()">Create User</button>
+    <button mat-button [routerLink]="['./createDate']" (click)="onCreateDate()">Create New Date</button>
+    <button mat-button [routerLink]="['./datesOverview']" (click)="onShowDates()">Show Dates</button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
