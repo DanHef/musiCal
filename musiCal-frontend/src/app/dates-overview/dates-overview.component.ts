@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { DateService } from '../common/date.service';
 
 @Component({
-  selector: 'app-dates-overview',
-  templateUrl: './dates-overview.component.html',
-  styleUrls: ['./dates-overview.component.css']
+    selector: 'app-dates-overview',
+    templateUrl: './dates-overview.component.html',
+    styleUrls: ['./dates-overview.component.css']
 })
 export class DatesOverviewComponent implements OnInit {
 
-  constructor() { }
+    displayedColumns: string[] = ['fromDate', 'fromTime', 'toDate', 'toTime', 'description', 'type'];
+    dates: any;
 
-  ngOnInit() {
-  }
+    constructor(private readonly dateService: DateService) { }
+
+    async ngOnInit() {
+        this.dates = await this.dateService.getAllDates();
+    }
 
 }

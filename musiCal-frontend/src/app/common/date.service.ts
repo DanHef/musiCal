@@ -4,18 +4,22 @@ import { HttpClient } from "@angular/common/http";
 const SERVER_URL = "http://localhost:8888";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DateService {
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  create(date) {
-    this.http.post(SERVER_URL + "/dates", date).subscribe((response) => {
-      console.log("Successfully created new date");
-    },
-    (error) => {
-      console.log(error);
-    })
-  }
+    create(date) {
+        this.http.post(SERVER_URL + "/dates", date).subscribe((response) => {
+            console.log("Successfully created new date");
+        },
+            (error) => {
+                console.log(error);
+            })
+    }
+
+    getAllDates(): Promise<Object> {
+        return this.http.get(SERVER_URL + '/dates').toPromise();
+    }
 }
