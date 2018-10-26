@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { UserService } from './common/user.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialDesignModule} from './material-design.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { UserService } from './common/user.service';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialDesignModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
