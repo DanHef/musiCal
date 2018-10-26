@@ -8,7 +8,7 @@ import { DateService } from '../common/date.service';
 })
 export class DatesOverviewComponent implements OnInit {
 
-    displayedColumns: string[] = ['fromDate', 'fromTime', 'toDate', 'toTime', 'description', 'type'];
+    displayedColumns: string[] = ['fromDate', 'fromTime', 'toDate', 'toTime', 'description', 'type', 'edit'];
     dates: any;
 
     constructor(private readonly dateService: DateService) { }
