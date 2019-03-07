@@ -8,7 +8,7 @@ const users = require('./controller/user.controller');
 
 //mongoose
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://database/test');
 
 const User = require('./model/user.model');
 const Dates = require('./model/date.model');
