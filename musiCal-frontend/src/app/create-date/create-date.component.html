@@ -1,45 +1,53 @@
-<p>
-  <label>
-    From:
-    <input type="text" [formControl]="fromDate">
-  </label>
-</p>
+<div>
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Von Datum" [formControl]="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+    </mat-form-field>
+</div>
 
 <p>
-  <label>
-    From Time:
-    <input type="text" [formControl]="fromTime">
-  </label>
-</p>
-
-<p>
-  <label>
-    To:
-    <input type="text" [formControl]="toDate">
-  </label>
-</p>
-
-<p>
-  <label>
-    To Time:
-    <input type="text" [formControl]="toTime">
-  </label>
-</p>
-
-<p>
-  <label>
-      Description:
-      <input type="text" [formControl]="description">
+    <label>
+        From:
+        <input type="text" [formControl]="fromDate">
     </label>
 </p>
 
 <p>
-  <label>
-        Type:
-        <input type="text" [formControl]="type">
-      </label>
+    <label>
+        From Time:
+        <input type="text" [formControl]="fromTime">
+    </label>
 </p>
 
 <p>
-  <button (click)="createDate()">Create Date</button>
+    <label>
+        To:
+        <input type="text" [formControl]="toDate">
+    </label>
+</p>
+
+<p>
+    <label>
+        To Time:
+        <input type="text" [formControl]="toTime">
+    </label>
+</p>
+
+<p>
+    <label>
+        Description:
+        <input type="text" [formControl]="description">
+    </label>
+</p>
+
+<p>
+    <label>
+        Type:
+        <input type="text" [formControl]="type">
+    </label>
+</p>
+
+<p>
+    <button (click)="createDate()">Create Date</button>
 </p>

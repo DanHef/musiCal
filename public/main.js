@@ -225,6 +225,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateService", function() { return DateService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -236,12 +237,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var SERVER_URL = "http://localhost:8888";
 var DateService = /** @class */ (function () {
     function DateService(http) {
         this.http = http;
     }
     DateService.prototype.create = function (date) {
+        var newDate = date;
+        newDate.fromDay = this.formatDateField(newDate.fromDay);
+        newDate.fromTime = this.formatTimeField(newDate.fromTime);
+        newDate.toDay = this.formatDateField(newDate.toDay);
+        newDate.toTime = this.formatTimeField(newDate.toTime);
         this.http.post(SERVER_URL + "/dates", date).subscribe(function (response) {
             console.log("Successfully created new date");
         }, function (error) {
@@ -249,7 +256,42 @@ var DateService = /** @class */ (function () {
         });
     };
     DateService.prototype.getAllDates = function () {
-        return this.http.get(SERVER_URL + '/dates').toPromise();
+        var _this = this;
+        var transformDateString = Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (dateObjects) {
+            for (var i = 0; i < dateObjects.length; i++) {
+                dateObjects[i].fromDay = _this.createDateObject(dateObjects[i].fromDay);
+                dateObjects[i].toDay = _this.createDateObject(dateObjects[i].toDay);
+            }
+            ;
+            return dateObjects;
+        });
+        return this.http.get(SERVER_URL + '/dates').pipe(transformDateString).toPromise();
+    };
+    DateService.prototype.formatDateField = function (date) {
+        return date.getFullYear().toString() + (date.getMonth() + 1) + date.getDate();
+    };
+    DateService.prototype.formatTimeField = function (time) {
+        var timeFormat = /^([0-9]{2})\:([0-9]{2})$/;
+        if (timeFormat.test(time) == false) {
+            var numberCheck = /[0-9]/;
+            if (numberCheck.test(time) == false) {
+                //only numbers are allowed in the time field
+                return null;
+            }
+            var formattedTime = void 0;
+            //take first two numbers as hours
+            formattedTime = time.toString().substr(0, 2);
+            //take second two numbers as minutes
+            formattedTime = formattedTime + time.toString().substr(2, 4);
+        }
+        else {
+            return time;
+        }
+    };
+    DateService.prototype.createDateObject = function (dateString) {
+        var newDateObject = new Date();
+        newDateObject.setFullYear(parseInt(dateString.substr(0, 4)), parseInt(dateString.substr(4, 2)) - 1, parseInt(dateString.substr(6, 2)));
+        return newDateObject;
     };
     DateService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
@@ -328,7 +370,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  <label>\n    From:\n    <input type=\"text\" [formControl]=\"fromDate\">\n  </label>\n</p>\n\n<p>\n  <label>\n    From Time:\n    <input type=\"text\" [formControl]=\"fromTime\">\n  </label>\n</p>\n\n<p>\n  <label>\n    To:\n    <input type=\"text\" [formControl]=\"toDate\">\n  </label>\n</p>\n\n<p>\n  <label>\n    To Time:\n    <input type=\"text\" [formControl]=\"toTime\">\n  </label>\n</p>\n\n<p>\n  <label>\n      Description:\n      <input type=\"text\" [formControl]=\"description\">\n    </label>\n</p>\n\n<p>\n  <label>\n        Type:\n        <input type=\"text\" [formControl]=\"type\">\n      </label>\n</p>\n\n<p>\n  <button (click)=\"createDate()\">Create Date</button>\n</p>"
+module.exports = "<div>\n    <mat-form-field>\n        <input matInput [matDatepicker]=\"picker\" placeholder=\"Von Datum\" [formControl]=\"fromDate\">\n        <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n        <mat-datepicker #picker startView=\"year\" [startAt]=\"startDate\"></mat-datepicker>\n    </mat-form-field>\n</div>\n\n<p>\n    <label>\n        From:\n        <input type=\"text\" [formControl]=\"fromDate\">\n    </label>\n</p>\n\n<p>\n    <label>\n        From Time:\n        <input type=\"text\" [formControl]=\"fromTime\">\n    </label>\n</p>\n\n<p>\n    <label>\n        To:\n        <input type=\"text\" [formControl]=\"toDate\">\n    </label>\n</p>\n\n<p>\n    <label>\n        To Time:\n        <input type=\"text\" [formControl]=\"toTime\">\n    </label>\n</p>\n\n<p>\n    <label>\n        Description:\n        <input type=\"text\" [formControl]=\"description\">\n    </label>\n</p>\n\n<p>\n    <label>\n        Type:\n        <input type=\"text\" [formControl]=\"type\">\n    </label>\n</p>\n\n<p>\n    <button (click)=\"createDate()\">Create Date</button>\n</p>"
 
 /***/ }),
 
@@ -481,7 +523,7 @@ var CreateUserComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2RhdGVzLW92ZXJ2aWV3L2RhdGVzLW92ZXJ2aWV3LmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGF0ZXMtb3ZlcnZpZXcvZGF0ZXMtb3ZlcnZpZXcuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFlBQVk7Q0FDZiIsImZpbGUiOiJzcmMvYXBwL2RhdGVzLW92ZXJ2aWV3L2RhdGVzLW92ZXJ2aWV3LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XG4gICAgd2lkdGg6IDEwMCU7XG59Il19 */"
 
 /***/ }),
 
@@ -492,7 +534,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table mat-table [dataSource]=\"dates\" class=\"mat-elevation-z8\">\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"fromDate\">\n      <th mat-header-cell *matHeaderCellDef>Tag</th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.fromDay}} </td>\n    </ng-container>\n  \n    <!-- Name Column -->\n    <ng-container matColumnDef=\"fromTime\">\n      <th mat-header-cell *matHeaderCellDef> Uhrzeit Von </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.fromTime}} </td>\n    </ng-container>\n  \n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"toDate\">\n      <th mat-header-cell *matHeaderCellDef> Tag Bis </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.toDay}} </td>\n    </ng-container>\n  \n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"toTime\">\n      <th mat-header-cell *matHeaderCellDef> Uhrzeit Bis </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.toTime}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"description\">\n        <th mat-header-cell *matHeaderCellDef> Beschreibung </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.description}} </td>\n      </ng-container>\n\n      <ng-container matColumnDef=\"type\">\n        <th mat-header-cell *matHeaderCellDef> Typ </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.type}} </td>\n      </ng-container>\n  \n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n  </table>\n"
+module.exports = "<div class=\"content\">\n    <table mat-table [dataSource]=\"dates\" class=\"mat-elevation-z8\">\n        <!-- Position Column -->\n        <ng-container matColumnDef=\"fromDate\">\n            <th mat-header-cell *matHeaderCellDef>Tag</th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.fromDay | date }} </td>\n        </ng-container>\n\n        <!-- Name Column -->\n        <ng-container matColumnDef=\"fromTime\">\n            <th mat-header-cell *matHeaderCellDef> Uhrzeit Von </th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.fromTime}} </td>\n        </ng-container>\n\n        <!-- Weight Column -->\n        <ng-container matColumnDef=\"toDate\">\n            <th mat-header-cell *matHeaderCellDef> Tag Bis </th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.toDay | date }} </td>\n        </ng-container>\n\n        <!-- Symbol Column -->\n        <ng-container matColumnDef=\"toTime\">\n            <th mat-header-cell *matHeaderCellDef> Uhrzeit Bis </th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.toTime}} </td>\n        </ng-container>\n\n        <ng-container matColumnDef=\"description\">\n            <th mat-header-cell *matHeaderCellDef> Beschreibung </th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.description}} </td>\n        </ng-container>\n\n        <ng-container matColumnDef=\"type\">\n            <th mat-header-cell *matHeaderCellDef> Typ </th>\n            <td mat-cell *matCellDef=\"let element\"> {{element.type}} </td>\n        </ng-container>\n\n        <ng-container matColumnDef=\"edit\">\n            <th mat-header-cell *matHeaderCellDef></th>\n            <td mat-cell *matCellDef=\"let element\">\n                <button mat-button (click)=\"onEditDate()\">\n                    <mat-icon>create</mat-icon>\n                </button>\n            </td>\n        </ng-container>\n\n        <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n        <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n</div>"
 
 /***/ }),
 
@@ -557,7 +599,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var DatesOverviewComponent = /** @class */ (function () {
     function DatesOverviewComponent(dateService) {
         this.dateService = dateService;
-        this.displayedColumns = ['fromDate', 'fromTime', 'toDate', 'toTime', 'description', 'type'];
+        this.displayedColumns = ['fromDate', 'fromTime', 'toDate', 'toTime', 'description', 'type', 'edit'];
     }
     DatesOverviewComponent.prototype.ngOnInit = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -687,8 +729,10 @@ var MaterialDesignModule = /** @class */ (function () {
     }
     MaterialDesignModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-            imports: [_angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatCheckboxModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatToolbarModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatTableModule"]],
-            exports: [_angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatCheckboxModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatToolbarModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatTableModule"]],
+            imports: [_angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatCheckboxModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatToolbarModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatTableModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatDatepickerModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatFormFieldModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatNativeDateModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatInputModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatIconModule"]],
+            exports: [_angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatCheckboxModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatToolbarModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatButtonModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatTableModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatDatepickerModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatFormFieldModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatNativeDateModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatInputModule"], _angular_material__WEBPACK_IMPORTED_MODULE_0__["MatIconModule"]],
         })
     ], MaterialDesignModule);
     return MaterialDesignModule;

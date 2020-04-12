@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "musiCal-frontend"
+  "defaultProject": "musiCal-frontend",
+  "cli": {
+    "defaultCollection": "@nativescript/schematics"
+  }
 }
